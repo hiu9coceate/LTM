@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NetVision AI Enterprise</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <div class="logo">
+            <span class="logo-icon">🤡</span>
+            <span class="logo-text">NETVISION</span>
+        </div>
+
+        <input type="text" id="targetId" placeholder="ID Máy Gửi" class="input-field">
+
+        <button id="btnConnect" onclick="connect()" class="btn-primary">KẾT NỐI</button>
+
+        <label class="control-group">
+            <input type="checkbox" id="chkControl">
+            <span>🖱️ Mouse</span>
+        </label>
+
+        <button class="btn-icon" onclick="resetZoom()" title="Reset Zoom">↺</button>
+
+        <button id="btnDisconnect" onclick="disconnect()" class="btn-disconnect" style="display: none;">✕ NGẮT KẾT NỐI</button>
+
+        <span id="status" class="status-text">🔴</span>
+    </div>
+
+    <!-- SCREEN CONTAINER -->
+    <div id="screen-container">
+        <!-- BACKGROUND VIDEO -->
+        <video id="bg-video" autoplay muted loop playsinline>
+            <source src="assets/demo.mp4" type="video/mp4">
+        </video>
+
+        <!-- WAITING MESSAGE -->
+        <div id="waitingMsg" class="waiting-message">
+            <div class="waiting-icon">🚀</div>
+            <div class="waiting-text">Sẵn sàng kết nối đến máy tính từ xa</div>
+            <button id="btnToggleSound" class="btn-sound" onclick="toggleSound()" title="Bật/Tắt âm thanh">🔇</button>
+        </div>
+
+        <!-- REMOTE SCREEN IMAGE -->
+        <img id="remote-screen" onmousemove="sendMouseMove(event)" onmousedown="sendClick(event)"
+            ontouchmove="sendMove(event)" alt="Remote Screen" />
+    </div>
+
+    <!-- AI WIDGET BUTTON -->
+    <div id="ai-widget-btn" onclick="toggleChat()">
+        <span class="widget-icon">✨</span>
+    </div>
+
+    <!-- AI CHAT BOX -->
+    <div id="ai-chat-box">
+        <div class="chat-header">
+            <span>✨ NETVISION AI</span>
+            <span class="chat-close" onclick="toggleChat()">✖</span>
+        </div>
+
+        <div class="chat-body" id="chat-content">
+            <div class="chat-msg msg-ai">
+                Chào! hãy chọn nút dưới để cắt vùng bạn cần OCR hoặc Hỏi AI
+            </div>
+        </div>
+
+        <div class="chat-footer">
+            <button onclick="startSnippingMode()" class="btn-snipping">
+                ✂️ CẮT MÀN HÌNH
+            </button>
+        </div>
+    </div>
+
+    <!-- SNIPPING OVERLAY -->
+    <div id="snipping-overlay" onmousedown="startDrag(event)" onmousemove="doDrag(event)" onmouseup="endDrag(event)"
+        ontouchstart="startDrag(event)" ontouchmove="doDrag(event)" ontouchend="endDrag(event)">
+
+        <div id="selection-box"></div>
+
+        <div id="action-bar">
+            <button id="btn-ocr" class="action-btn" onclick="requestHighResImage('OCR')">
+                📄 Đọc Chữ
+            </button>
+            <button id="btn-ai" class="action-btn" onclick="showAIPrompt()">
+                ✨ Hỏi AI
+            </button>
+        </div>
+
+        <!-- AI PROMPT INPUT -->
+        <div id="ai-prompt-box">
+            <div class="prompt-header">
+                <span>✨ Hỏi AI về vùng đã chọn</span>
+                <span class="prompt-close" onclick="hideAIPrompt()">✖</span>
+            </div>
+            <div class="prompt-body">
+                <input type="text" id="ai-prompt-input"
+                    placeholder="Ví dụ: Đây là thông tin gì? Giải thích nội dung này..." />
+                <div class="prompt-buttons">
+                    <button class="btn-cancel" onclick="hideAIPrompt()">Hủy</button>
+                    <button class="btn-send" onclick="sendAIRequest()">
+                        <span>Gửi</span>
+                        <span>→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
